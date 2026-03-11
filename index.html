@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Casric Stars FC</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'DM Sans',sans-serif;background:#f5f2ed;color:#1a1a18;min-height:100vh;overflow-x:hidden}
+:root{--y:#e8d820;--c:#3bb8c8;--dark:#1a1a18;--mid:#3a3a36;--sand:#f5f2ed;--sand2:#ece9e2;--muted:#8a8a80;--border:#d8d4cc;--nav-h:68px}
+h1,h2,h3{font-family:'DM Serif Display',serif;font-weight:400;line-height:1.05}
+em{font-style:italic}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--sand2)}
+::-webkit-scrollbar-thumb{background:var(--c)}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav-h);background:rgba(245,242,237,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 8vw}
+.nav-brand{display:flex;align-items:center;text-decoration:none;cursor:pointer}
+.nav-brand-name{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:2px;color:var(--dark);line-height:1}
+.nav-brand-name span{color:var(--c)}
+.nav-links{display:flex;align-items:center;gap:0;list-style:none}
+.nav-links li button{font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);background:none;border:none;cursor:pointer;padding:8px 16px;transition:color 0.2s;display:block;border-bottom:2px solid transparent}
+.nav-links li button:hover{color:var(--dark)}
+.nav-links li button.active{color:var(--dark);border-bottom-color:var(--y)}
+.nav-ticket{background:var(--dark) !important;color:var(--y) !important;padding:8px 20px !important;border-bottom:none !important}
+.nav-ticket:hover{background:var(--c) !important;color:var(--dark) !important}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hamburger span{width:22px;height:1.5px;background:var(--dark);display:block;transition:all 0.3s}
+.mobile-nav{display:none;position:fixed;top:var(--nav-h);left:0;right:0;z-index:199;background:var(--sand);border-bottom:1px solid var(--border);padding:20px 8vw 28px;flex-direction:column;gap:4px}
+.mobile-nav.open{display:flex}
+.mobile-nav button{font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);background:none;border:none;cursor:pointer;padding:14px 0;text-align:left;border-bottom:1px solid var(--border);transition:color 0.2s}
+.mobile-nav button:hover,.mobile-nav button.active{color:var(--dark)}
+
+/* PAGE ENGINE */
+.page{display:none;padding-top:var(--nav-h);min-height:100vh;animation:pageIn 0.35s ease}
+.page.active{display:block}
+@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* SLIDER */
+.slider{position:relative;width:100%;height:calc(100vh - var(--nav-h));overflow:hidden;background:var(--dark)}
+.slide{position:absolute;inset:0;display:flex;align-items:center;padding:0 8vw;opacity:0;transition:opacity 0.8s ease;pointer-events:none}
+.slide.active{opacity:1;pointer-events:all}
+.slide:nth-child(1){background:linear-gradient(125deg,rgba(17,20,16,0.88) 40%,rgba(14,40,48,0.9) 100%),url(https://images.pexels.com/photos/274422/pexels-photo-274422.jpeg?auto=compress&cs=tinysrgb&w=1200) center/cover}
+.slide:nth-child(2){background:linear-gradient(125deg,rgba(20,19,14,0.88) 40%,rgba(40,38,0,0.9) 100%),url(https://images.pexels.com/photos/104675/pexels-photo-104675.jpeg?auto=compress&cs=tinysrgb&w=1200) center/cover}
+.slide:nth-child(3){background:linear-gradient(125deg,rgba(15,20,24,0.88) 40%,rgba(10,32,36,0.9) 100%),url(https://images.pexels.com/photos/159594/soccer-football-player-sport-159594.jpeg?auto=compress&cs=tinysrgb&w=1200) center/cover}
+.slide-inner{max-width:640px;z-index:2;position:relative}
+.slide-tag{font-family:'DM Sans',sans-serif;font-size:0.68rem;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--c);margin-bottom:20px;display:block}
+.slide h1{font-size:clamp(3.2rem,8vw,7rem);color:#f5f2ed;line-height:0.93;margin-bottom:24px}
+.slide h1 em{color:var(--y);font-style:italic}
+.slide-desc{font-size:0.95rem;font-weight:300;color:rgba(245,242,237,0.45);line-height:1.85;max-width:420px;margin-bottom:36px}
+.slide-btn{display:inline-flex;align-items:center;gap:10px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;background:var(--y);color:var(--dark);padding:13px 28px;border:none;cursor:pointer;transition:all 0.25s}
+.slide-btn:hover{background:var(--c);gap:16px}
+.slide-visual{position:absolute;right:8vw;top:50%;transform:translateY(-50%);width:min(360px,40vw);opacity:0.06;pointer-events:none}
+.slide-visual img{width:100%;filter:grayscale(1) brightness(3)}
+.slider-nav{position:absolute;bottom:36px;left:8vw;display:flex;align-items:center;gap:20px;z-index:10}
+.slider-dots{display:flex;gap:8px;align-items:center}
+.dot{width:22px;height:2px;background:rgba(255,255,255,0.18);cursor:pointer;transition:all 0.3s;border:none;padding:0;flex-shrink:0}
+.dot.active{background:var(--y);width:38px}
+.slider-count{font-family:'Bebas Neue',sans-serif;font-size:0.82rem;letter-spacing:2px;color:rgba(255,255,255,0.2)}
+.slider-arrows{position:absolute;bottom:24px;right:8vw;display:flex;gap:2px;z-index:10}
+.s-arrow{width:44px;height:44px;border:1px solid rgba(255,255,255,0.1);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.35);transition:all 0.2s;font-size:1rem}
+.s-arrow:hover{border-color:var(--y);color:var(--y)}
+.slider-progress{position:absolute;bottom:0;left:0;height:2px;background:var(--y);transition:width 0.1s linear;z-index:10}
+
+/* HOME QUICK */
+.home-quick{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);margin:0 8vw}
+.qlink{padding:30px 26px;border-right:1px solid var(--border);cursor:pointer;background:var(--sand);transition:background 0.2s;display:flex;flex-direction:column;gap:8px}
+.qlink:last-child{border-right:none}
+.qlink:hover{background:var(--sand2)}
+.qlink-icon{font-size:1.3rem}
+.qlink-title{font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--dark)}
+.qlink-arrow{font-size:0.72rem;color:var(--muted);margin-top:auto;transition:color 0.2s}
+.qlink:hover .qlink-arrow{color:var(--c)}
+
+/* HOME GRID */
+.home-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--border);margin:0 8vw}
+.home-section{padding:56px 8vw;border-right:1px solid var(--border)}
+.home-section:last-child{border-right:none}
+.section-label{font-family:'DM Sans',sans-serif;font-size:0.66rem;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border);display:block}
+.fixture-item{display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid var(--border);font-size:0.86rem}
+.fixture-date{color:var(--muted);font-size:0.75rem;font-weight:300}
+.fixture-teams{font-weight:500;margin-top:2px}
+.fixture-comp{font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--c);font-weight:700}
+.news-item{padding:18px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.news-item:hover .ni-title{color:var(--c)}
+.ni-date{font-size:0.7rem;color:var(--muted);font-weight:300;margin-bottom:5px;letter-spacing:1px}
+.ni-title{font-family:'DM Serif Display',serif;font-size:1.05rem;line-height:1.3;transition:color 0.2s}
+.ni-tag{display:inline-block;margin-top:7px;font-size:0.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--y);background:var(--dark);padding:3px 8px}
+
+/* PAGE HEADER */
+.page-header{padding:72px 8vw 56px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.page-header::after{content:attr(data-wm);position:absolute;right:-1vw;bottom:-8px;font-family:'Bebas Neue',sans-serif;font-size:16vw;color:transparent;-webkit-text-stroke:1px rgba(26,26,24,0.04);line-height:1;pointer-events:none;white-space:nowrap}
+.ph-label{font-size:0.66rem;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:block}
+.page-header h1{font-size:clamp(2.4rem,6vw,5rem)}
+.page-header h1 em{color:var(--c)}
+.ph-desc{margin-top:14px;font-size:0.92rem;font-weight:300;color:var(--mid);line-height:1.85;max-width:480px}
+
+/* ABOUT */
+.about-intro{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);padding-right:8vw}
+.about-text{padding:56px 8vw}
+.about-crest-panel{background:var(--dark);display:flex;align-items:center;justify-content:center;padding:56px;border-left:1px solid var(--border);position:relative;overflow:hidden}
+.about-panel-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.45}
+.crest-img{width:190px;height:190px;object-fit:contain;filter:drop-shadow(0 0 40px rgba(59,184,200,0.2));animation:float 5s ease-in-out infinite;position:relative;z-index:1}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.about-body{font-size:0.92rem;font-weight:300;line-height:1.95;color:var(--mid);margin-bottom:24px}
+.about-body strong{color:var(--dark);font-weight:600}
+.facts-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);border-left:1px solid var(--border);margin:0 8vw}
+.fact-box{padding:26px 22px;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+.fbl{font-size:0.62rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.fbv{font-family:'DM Serif Display',serif;font-size:1.35rem;color:var(--dark)}
+.fbv span{color:var(--c)}
+.about-motto{background:var(--dark);padding:72px 8vw;text-align:center}
+.about-motto h2{font-size:clamp(2.2rem,5.5vw,4.5rem);color:var(--y);margin-bottom:10px}
+.about-motto p{color:rgba(255,255,255,0.5);font-size:0.82rem;font-weight:300;letter-spacing:3px;text-transform:uppercase}
+.tl-section{padding:56px 8vw}
+.tl-lbl{font-size:0.66rem;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:36px;display:block;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.tl-row{display:grid;grid-template-columns:88px 1px 1fr;gap:0 28px;padding:24px 0;border-bottom:1px solid var(--border);align-items:start}
+.tl-year{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--c);padding-top:2px}
+.tl-line{background:var(--border);position:relative}
+.tl-line::before{content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:50%;background:var(--y);border:1.5px solid var(--sand)}
+.tl-t{font-family:'DM Serif Display',serif;font-size:1.05rem;margin-bottom:5px}
+.tl-d{font-size:0.83rem;font-weight:300;color:var(--muted);line-height:1.7}
+
+/* PLAYERS */
+.players-filters{display:flex;gap:0;padding:0 8vw;border-bottom:1px solid var(--border);overflow-x:auto}
+.filter-btn{font-family:'DM Sans',sans-serif;font-size:0.7rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);background:none;border:none;padding:17px 20px;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap}
+.filter-btn:hover{color:var(--dark)}
+.filter-btn.active{color:var(--dark);border-bottom-color:var(--y)}
+.players-wrap{padding:40px 8vw}
+.players-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+.player-card{cursor:pointer;overflow:hidden;transition:background 0.2s;background:var(--sand)}
+.player-card:hover{background:var(--sand2)}
+.player-card.hidden{display:none}
+.pa{width:100%;aspect-ratio:1;background:var(--dark);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background-image:url(https://images.pexels.com/photos/159555/soccer-football-athlete-player-159555.jpeg?auto=compress&cs=tinysrgb&w=600);background-size:cover;background-position:center}
+.pa-bg{position:absolute;inset:0;background:linear-gradient(135deg,#161614 0%,#0e2c34 100%);opacity:0.85}
+.pa-init{font-family:'Bebas Neue',sans-serif;font-size:3.2rem;color:rgba(245,242,237,0.07);position:relative;z-index:1;letter-spacing:2px}
+.pa-num{position:absolute;bottom:10px;right:12px;font-family:'Bebas Neue',sans-serif;font-size:1.9rem;color:var(--y);opacity:0.55;line-height:1}
+.pa-pos{position:absolute;top:10px;left:10px;font-size:0.58rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--y);color:var(--dark);padding:3px 7px}
+.pi{padding:14px 16px 18px}
+.pi-name{font-family:'DM Serif Display',serif;font-size:0.98rem;margin-bottom:2px}
+.pi-meta{font-size:0.7rem;font-weight:300;color:var(--muted);letter-spacing:0.5px}
+
+/* MANAGEMENT */
+.mgmt-intro{padding:52px 8vw;border-bottom:1px solid var(--border);max-width:760px}
+.mgmt-intro p{font-size:0.92rem;font-weight:300;color:var(--mid);line-height:1.9}
+.mgmt-wrap{padding:40px 8vw}
+.mgmt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+.mgmt-card{border:none;padding:38px 30px;transition:background 0.2s;background:var(--sand)}
+.mgmt-card:hover{background:var(--sand2)}
+.mgmt-card.feat{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr;gap:36px;align-items:start;background:var(--dark);background-image:linear-gradient(105deg,rgba(26,26,24,0.92) 0%,rgba(26,26,24,0.75) 45%,transparent 60%),url(https://images.pexels.com/photos/6077784/pexels-photo-6077784.jpeg?auto=compress&cs=tinysrgb&w=800) right center/cover}
+.mgmt-card.feat:hover{background:#252522;background-image:linear-gradient(105deg,rgba(37,37,34,0.95) 0%,rgba(37,37,34,0.8) 45%,transparent 60%),url(https://images.pexels.com/photos/6077784/pexels-photo-6077784.jpeg?auto=compress&cs=tinysrgb&w=800) right center/cover}
+.ma{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--c),var(--y));display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--dark);flex-shrink:0;margin-bottom:18px}
+.mgmt-card.feat .ma{width:90px;height:90px;font-size:2rem;margin-bottom:0}
+.mr{font-size:0.62rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--c);margin-bottom:7px}
+.mn{font-family:'DM Serif Display',serif;font-size:1.3rem;margin-bottom:7px;color:var(--dark)}
+.mgmt-card.feat .mn{color:var(--y)}
+.md{font-size:0.83rem;font-weight:300;color:var(--muted);line-height:1.7}
+.mgmt-card.feat .md{color:rgba(255,255,255,0.65)}
+
+/* STADIUM */
+.st-hero{height:340px;background:var(--dark);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border-bottom:1px solid var(--border);margin:0 8vw}
+.st-hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.4}
+.st-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(59,184,200,0.07) 0%,transparent 70%),linear-gradient(160deg,#0c1c22 0%,#1a1a18 100%)}
+.st-hero-txt{position:relative;z-index:2;text-align:center}
+.st-hero-txt h2{font-size:clamp(1.8rem,5vw,3.8rem);color:var(--sand);margin-bottom:6px}
+.st-hero-txt p{color:var(--muted);font-size:0.82rem;font-weight:300;letter-spacing:2px}
+.st-facts{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border);margin:0 8vw}
+.sf{padding:32px 26px;border-right:1px solid var(--border)}
+.sf:last-child{border-right:none}
+.sf-val{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--dark);margin-bottom:5px}
+.sf-val em{color:var(--c);font-style:normal}
+.sf-lbl{font-size:0.64px;font-weight:600;font-size:0.64rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.st-info{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border)}
+.si{padding:56px 8vw;border-right:1px solid var(--border)}
+.si:last-child{border-right:none;background:var(--sand2)}
+.si h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:18px}
+.si p{font-size:0.86rem;font-weight:300;color:var(--mid);line-height:1.9}
+.dir-list{list-style:none;display:flex;flex-direction:column;gap:11px;margin-top:14px}
+.dir-list li{font-size:0.83rem;font-weight:300;color:var(--mid);padding-left:16px;position:relative;line-height:1.6}
+.dir-list li::before{content:'→';position:absolute;left:0;color:var(--c)}
+
+/* NEWS */
+.news-grid{display:grid;grid-template-columns:2fr 1fr;border-top:1px solid var(--border)}
+.news-main{border-right:1px solid var(--border)}
+.news-card{padding:36px 8vw;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.2s}
+.news-card:hover{background:var(--sand2)}
+.news-card.feat{background:var(--dark);padding:52px 8vw}
+.news-card.feat:hover{background:#1e1e1c}
+.news-card.feat .nc-date{color:rgba(255,255,255,0.4)}
+.news-card.feat .nc-title{color:#fff;font-size:clamp(1.3rem,2.8vw,2rem)}
+.news-card.feat .nc-exc{color:rgba(255,255,255,0.6)}
+.news-card.feat .nc-tag{background:var(--y);color:var(--dark)}
+.nc-date{font-size:0.7rem;color:var(--muted);font-weight:300;letter-spacing:1px;margin-bottom:9px}
+.nc-tag{display:inline-block;margin-bottom:11px;font-size:0.58rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--dark);color:var(--y);padding:3px 8px}
+.nc-title{font-family:'DM Serif Display',serif;font-size:1.25rem;margin-bottom:9px;line-height:1.2}
+.nc-exc{font-size:0.83rem;font-weight:300;color:var(--muted);line-height:1.7}
+.news-sidebar{padding:36px 28px}
+.sb-sect{margin-bottom:36px}
+.sb-h{font-size:0.62rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:18px;padding-bottom:9px;border-bottom:1px solid var(--border)}
+.sb-item{padding:12px 0;border-bottom:1px solid var(--border);font-size:0.8rem;cursor:pointer;transition:color 0.2s;line-height:1.4;font-weight:300;color:var(--mid)}
+.sb-item:hover{color:var(--dark)}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--border)}
+.ci-wrap{padding:56px 8vw;border-right:1px solid var(--border)}
+.ci-wrap h2{font-family:'DM Serif Display',serif;font-size:1.9rem;margin-bottom:22px}
+.ci-row{padding:18px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:95px 1fr;gap:14px}
+.crl{font-size:0.64rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding-top:2px}
+.crv{font-size:0.88rem;font-weight:300;color:var(--mid);line-height:1.7}
+.crv a{color:var(--c);text-decoration:none}
+.cf-wrap{padding:56px 8vw;background:var(--sand2)}
+.cf-wrap h3{font-family:'DM Serif Display',serif;font-size:1.4rem;margin-bottom:26px}
+.cf-f{margin-bottom:18px}
+.cf-f label{display:block;font-size:0.64rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.cf-f input,.cf-f textarea,.cf-f select{width:100%;background:var(--sand);border:1px solid var(--border);padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:0.86rem;font-weight:300;color:var(--dark);outline:none;transition:border-color 0.2s;appearance:none}
+.cf-f input:focus,.cf-f textarea:focus,.cf-f select:focus{border-color:var(--c)}
+.cf-f textarea{resize:vertical;min-height:90px}
+.cf-sub{background:var(--dark);color:var(--y);font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;border:none;padding:13px 28px;cursor:pointer;transition:all 0.25s;width:100%;margin-top:6px}
+.cf-sub:hover{background:var(--c);color:var(--dark)}
+
+/* FOOTER */
+footer{background:var(--dark);border-top:1px solid rgba(255,255,255,0.08);padding:56px 8vw 32px}
+.ft-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:56px;padding-bottom:44px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:24px}
+.ft-brand-n{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:2px;color:#fff;margin-bottom:9px}
+.ft-brand-n span{color:var(--c)}
+.ft-d{font-size:0.82rem;font-weight:300;color:rgba(255,255,255,0.55);line-height:1.8}
+.ft-h{font-size:0.62rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:16px}
+.ft-ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.ft-ul button{font-size:0.82rem;font-weight:400;color:rgba(255,255,255,0.7);background:none;border:none;cursor:pointer;text-align:left;padding:0;transition:color 0.2s}
+.ft-ul button:hover{color:var(--c)}
+.ft-bot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.fc{font-size:0.73rem;color:rgba(255,255,255,0.45);font-weight:300}
+.fc span{color:var(--c)}
+.fm{font-family:'Bebas Neue',sans-serif;font-size:0.88rem;letter-spacing:4px;color:rgba(232,216,32,0.55)}
+
+/* BACK TO TOP */
+.back-to-top{position:fixed;bottom:28px;right:8vw;z-index:150;width:48px;height:48px;border-radius:50%;border:1px solid var(--border);background:var(--dark);color:var(--y);font-size:1.25rem;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity 0.25s,visibility 0.25s,transform 0.25s,background 0.2s}
+.back-to-top.visible{opacity:1;visibility:visible;transform:translateY(0)}
+.back-to-top:hover{background:var(--c);color:var(--dark);border-color:var(--c)}
+.back-to-top:focus{outline:none}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .players-grid{grid-template-columns:repeat(3,1fr)}
+  .home-quick{grid-template-columns:repeat(2,1fr)}
+  .ft-top{grid-template-columns:1fr 1fr;gap:36px}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .about-intro,.home-grid,.news-grid,.contact-grid,.st-info{grid-template-columns:1fr}
+  .about-crest-panel{display:none}
+  .facts-grid,.st-facts{grid-template-columns:1fr 1fr}
+  .players-grid{grid-template-columns:1fr 1fr}
+  .mgmt-grid{grid-template-columns:1fr 1fr}
+  .mgmt-card.feat{grid-template-columns:1fr}
+  .home-section{border-right:none;border-bottom:1px solid var(--border)}
+  .news-main{border-right:none}
+  .ci-wrap{border-right:none}
+  .si{border-right:none}
+  .ft-top{grid-template-columns:1fr}
+  .tl-row{grid-template-columns:64px 1px 1fr;gap:0 18px}
+  .players-wrap,.mgmt-wrap{padding:24px 8vw}
+}
+@media(max-width:480px){
+  .home-quick{grid-template-columns:1fr 1fr}
+  .players-grid{grid-template-columns:1fr 1fr}
+  .mgmt-grid{grid-template-columns:1fr}
+  .st-facts{grid-template-columns:1fr 1fr}
+  .players-wrap,.mgmt-wrap{padding:20px 8vw}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand" onclick="showPage('home')">
+    <div class="nav-brand-name">CASRIC <span>STARS</span> FC</div>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><button onclick="showPage('home')" id="nav-home" class="active">Home</button></li>
+    <li><button onclick="showPage('about')" id="nav-about">About</button></li>
+    <li><button onclick="showPage('players')" id="nav-players">Players</button></li>
+    <li><button onclick="showPage('management')" id="nav-management">Management</button></li>
+    <li><button onclick="showPage('stadium')" id="nav-stadium">Stadium</button></li>
+    <li><button onclick="showPage('news')" id="nav-news">News</button></li>
+    <li><button onclick="showPage('contact')" id="nav-contact" class="nav-ticket">Contact</button></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-nav" id="mobileNav">
+  <button onclick="showPage('home');closeMobile()" id="mnav-home">Home</button>
+  <button onclick="showPage('about');closeMobile()" id="mnav-about">About</button>
+  <button onclick="showPage('players');closeMobile()" id="mnav-players">Players</button>
+  <button onclick="showPage('management');closeMobile()" id="mnav-management">Management</button>
+  <button onclick="showPage('stadium');closeMobile()" id="mnav-stadium">Stadium</button>
+  <button onclick="showPage('news');closeMobile()" id="mnav-news">News</button>
+  <button onclick="showPage('contact');closeMobile()" id="mnav-contact">Contact</button>
+</div>
+
+<!-- ═══ HOME ═══════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="slider" id="heroSlider">
+    <div class="slide active">
+      <div class="slide-visual"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Casric_Stars_F_C__logo.png/200px-Casric_Stars_F_C__logo.png" alt=""/></div>
+      <div class="slide-inner">
+        <span class="slide-tag">National First Division · 2024/25</span>
+        <h1>Hail<br><em>Casric</em><br>Stars</h1>
+        <p class="slide-desc">Born in KwaMhlanga, Mpumalanga. Competing at the highest levels of South African football.</p>
+        <button class="slide-btn" onclick="showPage('about')">Our Story &#8594;</button>
+      </div>
+    </div>
+    <div class="slide">
+      <div class="slide-visual"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Casric_Stars_F_C__logo.png/200px-Casric_Stars_F_C__logo.png" alt=""/></div>
+      <div class="slide-inner">
+        <span class="slide-tag">The Squad · 2024/25 Season</span>
+        <h1>Meet<br><em>The</em><br>Stars</h1>
+        <p class="slide-desc">Talented players united by one purpose — bringing top-flight football to Mpumalanga.</p>
+        <button class="slide-btn" onclick="showPage('players')">View Squad &#8594;</button>
+      </div>
+    </div>
+    <div class="slide">
+      <div class="slide-visual"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Casric_Stars_F_C__logo.png/200px-Casric_Stars_F_C__logo.png" alt=""/></div>
+      <div class="slide-inner">
+        <span class="slide-tag">Club Identity · Established 2012</span>
+        <h1>Team<br><em>Work</em><br>Wins</h1>
+        <p class="slide-desc">From the ABC Motsepe League to the NFD — a story of ambition and collective purpose.</p>
+        <button class="slide-btn" onclick="showPage('news')">Latest News &#8594;</button>
+      </div>
+    </div>
+    <div class="slider-nav">
+      <div class="slider-dots" id="sliderDots">
+        <button class="dot active" onclick="goSlide(0)"></button>
+        <button class="dot" onclick="goSlide(1)"></button>
+        <button class="dot" onclick="goSlide(2)"></button>
+      </div>
+      <div class="slider-count" id="sliderCount">01 / 03</div>
+    </div>
+    <div class="slider-arrows">
+      <button class="s-arrow" onclick="prevSlide()">&#8592;</button>
+      <button class="s-arrow" onclick="nextSlide()">&#8594;</button>
+    </div>
+    <div class="slider-progress" id="sliderProgress"></div>
+  </div>
+
+  <div class="home-quick">
+    <div class="qlink" onclick="showPage('about')"><span class="qlink-icon">🏟</span><div class="qlink-title">About the Club</div><div class="qlink-arrow">Explore &#8594;</div></div>
+    <div class="qlink" onclick="showPage('players')"><span class="qlink-icon">⚽</span><div class="qlink-title">Squad & Players</div><div class="qlink-arrow">View &#8594;</div></div>
+    <div class="qlink" onclick="showPage('management')"><span class="qlink-icon">👔</span><div class="qlink-title">Management</div><div class="qlink-arrow">Meet &#8594;</div></div>
+    <div class="qlink" onclick="showPage('stadium')"><span class="qlink-icon">📍</span><div class="qlink-title">Stadium & Ground</div><div class="qlink-arrow">Find &#8594;</div></div>
+  </div>
+
+  <div class="home-grid">
+    <div class="home-section">
+      <span class="section-label">Latest News</span>
+      <div class="news-item" onclick="showPage('news')"><div class="ni-date">March 2025</div><div class="ni-title">Casric Stars gear up for crucial second half of NFD season</div><span class="ni-tag">Club News</span></div>
+      <div class="news-item" onclick="showPage('news')"><div class="ni-date">February 2025</div><div class="ni-title">Youth development programme launches in KwaMhlanga</div><span class="ni-tag">Community</span></div>
+      <div class="news-item" onclick="showPage('news')"><div class="ni-date">January 2025</div><div class="ni-title">Club statement on the January transfer window</div><span class="ni-tag">Official</span></div>
+    </div>
+    <div class="home-section">
+      <span class="section-label">Upcoming Fixtures</span>
+      <div class="fixture-item"><div><div class="fixture-date">15 Mar 2025</div><div class="fixture-teams">Casric Stars vs Pretoria Callies</div></div><div class="fixture-comp">NFD</div></div>
+      <div class="fixture-item"><div><div class="fixture-date">22 Mar 2025</div><div class="fixture-teams">Tornado FC vs Casric Stars</div></div><div class="fixture-comp">NFD</div></div>
+      <div class="fixture-item"><div><div class="fixture-date">5 Apr 2025</div><div class="fixture-teams">Casric Stars vs Cape Town Spurs</div></div><div class="fixture-comp">NFD</div></div>
+      <div class="fixture-item"><div><div class="fixture-date">12 Apr 2025</div><div class="fixture-teams">Richards Bay vs Casric Stars</div></div><div class="fixture-comp">NFD</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ABOUT ═══════════════════════════════════════════ -->
+<div class="page" id="page-about">
+  <div class="page-header" data-wm="ABOUT">
+    <span class="ph-label">About the Club</span>
+    <h1>Our <em>Story</em></h1>
+    <p class="ph-desc">From humble community roots to the National First Division — the Casric Stars FC journey is one of ambition, grit, and collective pride.</p>
+  </div>
+  <div class="about-intro">
+    <div class="about-text">
+      <p class="about-body"><strong>Casric Stars FC</strong> is a South African professional football club based in <strong>KwaMhlanga, Mpumalanga</strong>. Founded in <strong>2012/13 as FC Palmeiras</strong>, the club initially competed in the North West stream of the ABC Motsepe League — the third tier of South African football.</p>
+      <p class="about-body">During the <strong>2017/18 season</strong>, the club rebranded to <strong>Casric FC</strong>, marking a new chapter of ambition. The club steadily built its reputation in the regional football scene, developing local talent and building a strong bond with the KwaMhlanga community.</p>
+      <p class="about-body">The defining moment arrived in <strong>August 2022</strong>, when Casric purchased the National First Division status from <strong>Free State Stars</strong> for <strong>R12 million</strong>. Rebranded as Casric Stars FC and relocated to Mpumalanga, the club debuted in the NFD for the <strong>2022/23 season</strong>.</p>
+      <p class="about-body">Today, Casric Stars FC competes under the <strong>Premier Soccer League</strong> with one clear ambition: promotion to the <strong>DStv Premiership</strong>.</p>
+    </div>
+    <div class="about-crest-panel">
+      <img class="about-panel-bg" src="https://images.pexels.com/photos/274422/pexels-photo-274422.jpeg?auto=compress&cs=tinysrgb&w=800" alt=""/>
+      <img class="crest-img" src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Casric_Stars_F_C__logo.png/200px-Casric_Stars_F_C__logo.png" alt="Casric Stars FC Crest"/>
+    </div>
+  </div>
+  <div class="facts-grid">
+    <div class="fact-box"><div class="fbl">Founded</div><div class="fbv"><span>2012</span></div></div>
+    <div class="fact-box"><div class="fbl">Original Name</div><div class="fbv">FC <span>Palmeiras</span></div></div>
+    <div class="fact-box"><div class="fbl">Home Base</div><div class="fbv">KwaMhlanga, <span>MPU</span></div></div>
+    <div class="fact-box"><div class="fbl">Division</div><div class="fbv"><span>NFD</span> · PSL</div></div>
+    <div class="fact-box"><div class="fbl">Kit Colours</div><div class="fbv"><span>Gold</span> & Cyan</div></div>
+    <div class="fact-box"><div class="fbl">Motto</div><div class="fbv">Team Work <span>Wins</span></div></div>
+    <div class="fact-box"><div class="fbl">Status Cost</div><div class="fbv"><span>R12M</span> — 2022</div></div>
+    <div class="fact-box"><div class="fbl">Acquired From</div><div class="fbv">Free State <span>Stars</span></div></div>
+  </div>
+  <div class="about-motto">
+    <h2>Team Work Wins</h2>
+    <p>Hail Casric &nbsp;·&nbsp; KwaMhlanga &nbsp;·&nbsp; Mpumalanga &nbsp;·&nbsp; South Africa</p>
+  </div>
+  <div class="tl-section">
+    <span class="tl-lbl">Club Timeline</span>
+    <div class="tl-row"><div class="tl-year">2012</div><div class="tl-line"></div><div><div class="tl-t">Founded as FC Palmeiras</div><div class="tl-d">Club established and enters the North West stream of the ABC Motsepe League, South Africa's third tier of football.</div></div></div>
+    <div class="tl-row"><div class="tl-year">2017</div><div class="tl-line"></div><div><div class="tl-t">Renamed Casric FC</div><div class="tl-d">Full rebrand during the 2017/18 SAFA Second Division season — a new identity and new ambitions.</div></div></div>
+    <div class="tl-row"><div class="tl-year">2022</div><div class="tl-line"></div><div><div class="tl-t">R12M NFD Status Acquisition</div><div class="tl-d">Landmark purchase of Free State Stars' National First Division status, entering professional football.</div></div></div>
+    <div class="tl-row"><div class="tl-year">2022</div><div class="tl-line"></div><div><div class="tl-t">Casric Stars FC Born</div><div class="tl-d">Rebranded, relocated to KwaMhlanga, Mpumalanga — debut NFD season 2022/23.</div></div></div>
+    <div class="tl-row"><div class="tl-year">NOW</div><div class="tl-line"></div><div><div class="tl-t">Eyes on the Premiership</div><div class="tl-d">Competing in the PSL-administered NFD with promotion to the DStv Premiership as the ultimate goal.</div></div></div>
+  </div>
+</div>
+
+<!-- ═══ PLAYERS ═════════════════════════════════════════ -->
+<div class="page" id="page-players">
+  <div class="page-header" data-wm="SQUAD">
+    <span class="ph-label">The Squad</span>
+    <h1>Our <em>Players</em></h1>
+    <p class="ph-desc">The men who wear the gold and cyan with pride every matchday. Representing KwaMhlanga and all of Mpumalanga.</p>
+  </div>
+  <div class="players-filters">
+    <button class="filter-btn active" onclick="filterPlayers('all',this)">All Players</button>
+    <button class="filter-btn" onclick="filterPlayers('GK',this)">Goalkeepers</button>
+    <button class="filter-btn" onclick="filterPlayers('DEF',this)">Defenders</button>
+    <button class="filter-btn" onclick="filterPlayers('MID',this)">Midfielders</button>
+    <button class="filter-btn" onclick="filterPlayers('FWD',this)">Forwards</button>
+  </div>
+  <div class="players-wrap">
+  <div class="players-grid" id="playersGrid">
+    <div class="player-card" data-pos="GK"><div class="pa"><div class="pa-bg"></div><div class="pa-init">TM</div><div class="pa-num">1</div><div class="pa-pos">GK</div></div><div class="pi"><div class="pi-name">Thabo Mokoena</div><div class="pi-meta">Goalkeeper · South Africa</div></div></div>
+    <div class="player-card" data-pos="GK"><div class="pa"><div class="pa-bg"></div><div class="pa-init">SS</div><div class="pa-num">16</div><div class="pa-pos">GK</div></div><div class="pi"><div class="pi-name">Sipho Sithole</div><div class="pi-meta">Goalkeeper · South Africa</div></div></div>
+    <div class="player-card" data-pos="DEF"><div class="pa"><div class="pa-bg"></div><div class="pa-init">LN</div><div class="pa-num">2</div><div class="pa-pos">DEF</div></div><div class="pi"><div class="pi-name">Lungelo Nkosi</div><div class="pi-meta">Right Back · South Africa</div></div></div>
+    <div class="player-card" data-pos="DEF"><div class="pa"><div class="pa-bg"></div><div class="pa-init">BM</div><div class="pa-num">5</div><div class="pa-pos">DEF</div></div><div class="pi"><div class="pi-name">Bongani Mahlangu</div><div class="pi-meta">Centre Back · South Africa</div></div></div>
+    <div class="player-card" data-pos="DEF"><div class="pa"><div class="pa-bg"></div><div class="pa-init">KD</div><div class="pa-num">4</div><div class="pa-pos">DEF</div></div><div class="pi"><div class="pi-name">Kagiso Dlamini</div><div class="pi-meta">Centre Back · South Africa</div></div></div>
+    <div class="player-card" data-pos="DEF"><div class="pa"><div class="pa-bg"></div><div class="pa-init">PN</div><div class="pa-num">3</div><div class="pa-pos">DEF</div></div><div class="pi"><div class="pi-name">Prince Ndlovu</div><div class="pi-meta">Left Back · Zimbabwe</div></div></div>
+    <div class="player-card" data-pos="MID"><div class="pa"><div class="pa-bg"></div><div class="pa-init">TS</div><div class="pa-num">8</div><div class="pa-pos">MID</div></div><div class="pi"><div class="pi-name">Tebogo Sekhukhu</div><div class="pi-meta">Defensive Mid · South Africa</div></div></div>
+    <div class="player-card" data-pos="MID"><div class="pa"><div class="pa-bg"></div><div class="pa-init">MM</div><div class="pa-num">6</div><div class="pa-pos">MID</div></div><div class="pi"><div class="pi-name">Mpho Mthombeni</div><div class="pi-meta">Central Mid · South Africa</div></div></div>
+    <div class="player-card" data-pos="MID"><div class="pa"><div class="pa-bg"></div><div class="pa-init">SZ</div><div class="pa-num">10</div><div class="pa-pos">MID</div></div><div class="pi"><div class="pi-name">Sibusiso Zwane</div><div class="pi-meta">Attacking Mid · South Africa</div></div></div>
+    <div class="player-card" data-pos="MID"><div class="pa"><div class="pa-bg"></div><div class="pa-init">NK</div><div class="pa-num">7</div><div class="pa-pos">MID</div></div><div class="pi"><div class="pi-name">Nhlanhla Khumalo</div><div class="pi-meta">Right Winger · South Africa</div></div></div>
+    <div class="player-card" data-pos="FWD"><div class="pa"><div class="pa-bg"></div><div class="pa-init">EM</div><div class="pa-num">9</div><div class="pa-pos">FWD</div></div><div class="pi"><div class="pi-name">Ezekiel Mabunda</div><div class="pi-meta">Striker · South Africa</div></div></div>
+    <div class="player-card" data-pos="FWD"><div class="pa"><div class="pa-bg"></div><div class="pa-init">KM</div><div class="pa-num">11</div><div class="pa-pos">FWD</div></div><div class="pi"><div class="pi-name">Kutlwano Moagi</div><div class="pi-meta">Left Winger · Botswana</div></div></div>
+  </div>
+  </div>
+</div>
+
+<!-- ═══ MANAGEMENT ══════════════════════════════════════ -->
+<div class="page" id="page-management">
+  <div class="page-header" data-wm="MGMT">
+    <span class="ph-label">Club Management</span>
+    <h1>The <em>Leadership</em></h1>
+    <p class="ph-desc">The people steering Casric Stars FC toward its goals — on and off the pitch.</p>
+  </div>
+  <div class="mgmt-intro"><p>At Casric Stars FC, strong leadership is everything. From the boardroom to the training ground, our management team brings experience, passion, and an unwavering commitment to the club's growth and community impact.</p></div>
+  <div class="mgmt-wrap">
+  <div class="mgmt-grid">
+    <div class="mgmt-card feat">
+      <div class="ma">BM</div>
+      <div><div class="mr">Club Owner &amp; Chairman</div><div class="mn" style="color:var(--y)">Bucks Mthombeni</div><div class="md">The visionary behind Casric Stars FC, Bucks Mthombeni led the club's transformation from regional football to the National First Division through the landmark R12 million acquisition of Free State Stars' PSL status in 2022. His ambition is clear: professional football for Mpumalanga, and ultimately, the DStv Premiership.</div></div>
+    </div>
+    <div class="mgmt-card"><div class="ma">HC</div><div class="mr">Head Coach</div><div class="mn">Head Coach</div><div class="md">Technical director responsible for all on-pitch decisions, squad selection, and tactical development of the first team.</div></div>
+    <div class="mgmt-card"><div class="ma">AC</div><div class="mr">Assistant Coach</div><div class="mn">Assistant Coach</div><div class="md">Supporting the head coach with training, analysis, and player welfare across all squads at the club.</div></div>
+    <div class="mgmt-card"><div class="ma">GK</div><div class="mr">Goalkeeper Coach</div><div class="mn">GK Coach</div><div class="md">Specialist coach overseeing the development and performance of the club's goalkeeping department.</div></div>
+    <div class="mgmt-card"><div class="ma">CE</div><div class="mr">Chief Executive</div><div class="mn">Club CEO</div><div class="md">Overseeing day-to-day operations, commercial partnerships, and strategic planning for sustainable growth.</div></div>
+    <div class="mgmt-card"><div class="ma">MT</div><div class="mr">Medical</div><div class="mn">Team Doctor</div><div class="md">Responsible for player health, injury prevention, rehabilitation, and all medical matters at the club.</div></div>
+    <div class="mgmt-card"><div class="ma">YD</div><div class="mr">Academy</div><div class="mn">Academy Director</div><div class="md">Leading the club's grassroots and youth development programmes in KwaMhlanga, creating pathways to professional football.</div></div>
+  </div>
+  </div>
+</div>
+
+<!-- ═══ STADIUM ══════════════════════════════════════════ -->
+<div class="page" id="page-stadium">
+  <div class="page-header" data-wm="HOME">
+    <span class="ph-label">Home Ground</span>
+    <h1>Our <em>Ground</em></h1>
+    <p class="ph-desc">The home of Casric Stars FC in KwaMhlanga, Mpumalanga — where our supporters power the team.</p>
+  </div>
+  <div class="st-hero"><img class="st-hero-img" src="https://images.pexels.com/photos/47730/the-ball-stadion-football-the-pitch-47730.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Stadium"/><div class="st-hero-bg"></div><div class="st-hero-txt"><h2>KwaMhlanga <em>Stadium</em></h2><p>Home of Casric Stars FC &nbsp;·&nbsp; Mpumalanga</p></div></div>
+  <div class="st-facts">
+    <div class="sf"><div class="sf-val"><em>KwaMhlanga</em></div><div class="sf-lbl">Location</div></div>
+    <div class="sf"><div class="sf-val">Mpumalanga</div><div class="sf-lbl">Province</div></div>
+    <div class="sf"><div class="sf-val"><em>NFD</em></div><div class="sf-lbl">Competition</div></div>
+    <div class="sf"><div class="sf-val">South <em>Africa</em></div><div class="sf-lbl">Country</div></div>
+  </div>
+  <div class="st-info">
+    <div class="si">
+      <h3>About the Ground</h3>
+      <p>Casric Stars FC plays its home matches in KwaMhlanga, Mpumalanga. The ground serves as a focal point for the local community, bringing professional National First Division football to the province for the first time following the club's historic 2022 PSL status acquisition.</p>
+      <br/><p>On matchdays the ground comes alive with the colours of gold and cyan as local supporters rally behind the Stars in their pursuit of promotion to the DStv Premiership.</p>
+    </div>
+    <div class="si">
+      <h3>Getting There</h3>
+      <ul class="dir-list">
+        <li>KwaMhlanga is in Nkangala District, Mpumalanga — approximately 70km northeast of Pretoria.</li>
+        <li>By road: Take the N4 east from Pretoria, exit at Bronkhorstspruit, follow R25 north toward KwaMhlanga.</li>
+        <li>Public transport connections available from Pretoria and eMalahleni (Witbank) taxi routes.</li>
+        <li>Parking available at and around the ground on matchdays.</li>
+        <li>Follow club channels for matchday updates, kick-off times, and ticketing.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ NEWS ════════════════════════════════════════════ -->
+<div class="page" id="page-news">
+  <div class="page-header" data-wm="NEWS">
+    <span class="ph-label">Club News</span>
+    <h1>Latest <em>News</em></h1>
+  </div>
+  <div class="news-grid">
+    <div class="news-main">
+      <div class="news-card feat"><div class="nc-date">March 2025</div><div class="nc-tag">Club News</div><div class="nc-title">Casric Stars gear up for crucial second half of NFD season</div><div class="nc-exc">The technical team has been working hard to sharpen the squad ahead of a pivotal run of fixtures that could define the club's season. With promotion within reach, the Stars are focused and determined.</div></div>
+      <div class="news-card"><div class="nc-date">February 2025</div><div class="nc-tag">Community</div><div class="nc-title">Youth development programme launches in KwaMhlanga</div><div class="nc-exc">Casric Stars FC is proud to launch a new grassroots development initiative, identifying and nurturing young talent across Mpumalanga.</div></div>
+      <div class="news-card"><div class="nc-date">January 2025</div><div class="nc-tag">Official</div><div class="nc-title">Club statement on the January transfer window</div><div class="nc-exc">The club confirms its activity during the mid-season transfer window, with targeted additions to strengthen the squad for the run-in.</div></div>
+      <div class="news-card"><div class="nc-date">December 2024</div><div class="nc-tag">Match Report</div><div class="nc-title">Stars end 2024 on a high with vital NFD victory</div><div class="nc-exc">A determined performance capped a positive end to the calendar year, picking up three crucial points before the festive break.</div></div>
+    </div>
+    <div class="news-sidebar">
+      <div class="sb-sect"><div class="sb-h">Categories</div><div class="sb-item">Club News</div><div class="sb-item">Match Reports</div><div class="sb-item">Community</div><div class="sb-item">Official Statements</div><div class="sb-item">Transfers</div></div>
+      <div class="sb-sect"><div class="sb-h">Quick Links</div><div class="sb-item" onclick="showPage('players')">&#8594; View Squad</div><div class="sb-item" onclick="showPage('management')">&#8594; Management</div><div class="sb-item" onclick="showPage('stadium')">&#8594; Stadium Info</div><div class="sb-item" onclick="showPage('contact')">&#8594; Contact Us</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONTACT ══════════════════════════════════════════ -->
+<div class="page" id="page-contact">
+  <div class="page-header" data-wm="CONTACT">
+    <span class="ph-label">Get in Touch</span>
+    <h1>Contact <em>Us</em></h1>
+    <p class="ph-desc">For all enquiries — media, partnerships, sponsorship, or general questions.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="ci-wrap">
+      <h2>Club Information</h2>
+      <div class="ci-row"><div class="crl">Club</div><div class="crv">Casric Stars FC</div></div>
+      <div class="ci-row"><div class="crl">Location</div><div class="crv">KwaMhlanga, Mpumalanga, South Africa</div></div>
+      <div class="ci-row"><div class="crl">Division</div><div class="crv">National First Division (PSL)</div></div>
+      <div class="ci-row"><div class="crl">PSL Profile</div><div class="crv"><a href="https://www.psl.co.za/club/Casric_Stars?league=national-first-division" target="_blank">psl.co.za &#8599;</a></div></div>
+      <div class="ci-row"><div class="crl">NFD</div><div class="crv"><a href="https://thenfd.co.za/team/casric-stars-fc" target="_blank">thenfd.co.za &#8599;</a></div></div>
+      <div class="ci-row"><div class="crl">Enquiries</div><div class="crv">Media &nbsp;·&nbsp; Sponsorship &nbsp;·&nbsp; Partnership &nbsp;·&nbsp; General</div></div>
+    </div>
+    <div class="cf-wrap">
+      <h3>Send a Message</h3>
+      <div class="cf-f"><label>Full Name</label><input type="text" placeholder="Your full name"/></div>
+      <div class="cf-f"><label>Email Address</label><input type="email" placeholder="your@email.com"/></div>
+      <div class="cf-f"><label>Enquiry Type</label><select><option>General Enquiry</option><option>Media &amp; Press</option><option>Sponsorship</option><option>Partnership</option><option>Youth Development</option><option>Other</option></select></div>
+      <div class="cf-f"><label>Message</label><textarea placeholder="Your message..."></textarea></div>
+      <button class="cf-sub" onclick="handleSubmit(this)">Send Message</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="siteFooter">
+  <div class="ft-top">
+    <div class="ft-brand">
+      <div class="ft-brand-n">CASRIC <span>STARS</span> FC</div>
+      <p class="ft-d">Proudly representing KwaMhlanga and the people of Mpumalanga in the National First Division. Hail Casric.</p>
+    </div>
+    <div><div class="ft-h">The Club</div><ul class="ft-ul"><li><button onclick="showPage('about')">About Us</button></li><li><button onclick="showPage('players')">Squad</button></li><li><button onclick="showPage('management')">Management</button></li><li><button onclick="showPage('stadium')">Stadium</button></li></ul></div>
+    <div><div class="ft-h">Media</div><ul class="ft-ul"><li><button onclick="showPage('news')">News</button></li><li><button onclick="showPage('contact')">Contact</button></li></ul></div>
+    <div><div class="ft-h">External</div><ul class="ft-ul"><li><button onclick="window.open('https://www.psl.co.za','_blank')">PSL Official</button></li><li><button onclick="window.open('https://thenfd.co.za','_blank')">The NFD</button></li><li><button onclick="window.open('https://www.safa.net','_blank')">SAFA</button></li></ul></div>
+  </div>
+  <div class="ft-bot">
+    <div class="fc">© 2025 Casric Stars FC &nbsp;·&nbsp; <span>KwaMhlanga, Mpumalanga</span></div>
+    <div class="fm">TEAM WORK WINS</div>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">&#8593;</button>
+
+<script>
+// PAGE ROUTER
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('#navLinks button').forEach(b=>b.classList.toggle('active',b.id==='nav-'+id));
+  document.querySelectorAll('#mobileNav button').forEach(b=>b.classList.toggle('active',b.id==='mnav-'+id));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// HAMBURGER
+document.getElementById('hamburger').addEventListener('click',()=>{document.getElementById('mobileNav').classList.toggle('open')});
+function closeMobile(){document.getElementById('mobileNav').classList.remove('open')}
+
+// HERO SLIDER
+let cur=0;
+const slides=document.querySelectorAll('.slide');
+const dots=document.querySelectorAll('.dot');
+const countEl=document.getElementById('sliderCount');
+const progEl=document.getElementById('sliderProgress');
+let pw=0,pTimer,aTimer;
+const INTERVAL=5800;
+
+function goSlide(n){
+  slides[cur].classList.remove('active');dots[cur].classList.remove('active');
+  cur=(n+slides.length)%slides.length;
+  slides[cur].classList.add('active');dots[cur].classList.add('active');
+  countEl.textContent=String(cur+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
+  resetProg();
+}
+function nextSlide(){goSlide(cur+1)}
+function prevSlide(){goSlide(cur-1)}
+
+function resetProg(){
+  clearInterval(pTimer);pw=0;progEl.style.width='0%';
+  pTimer=setInterval(()=>{pw+=100/(INTERVAL/100);progEl.style.width=pw+'%';if(pw>=100)clearInterval(pTimer)},100);
+}
+function startAuto(){clearInterval(aTimer);aTimer=setInterval(nextSlide,INTERVAL)}
+
+resetProg();startAuto();
+
+const sliderEl=document.getElementById('heroSlider');
+sliderEl.addEventListener('mouseenter',()=>{clearInterval(aTimer);clearInterval(pTimer)});
+sliderEl.addEventListener('mouseleave',()=>{resetProg();startAuto()});
+
+let tS=0;
+sliderEl.addEventListener('touchstart',e=>{tS=e.touches[0].clientX});
+sliderEl.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tS;if(Math.abs(dx)>50){dx<0?nextSlide():prevSlide()}});
+
+// PLAYER FILTER
+function filterPlayers(pos,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.player-card').forEach(c=>c.classList.toggle('hidden',pos!=='all'&&c.dataset.pos!==pos));
+}
+
+// CONTACT FORM
+function handleSubmit(btn){
+  btn.textContent='Message Sent ✓';btn.style.background='#3bb8c8';btn.style.color='#1a1a18';
+  setTimeout(()=>{btn.textContent='Send Message';btn.style.background='';btn.style.color=''},3000);
+}
+
+// BACK TO TOP
+const backToTop=document.getElementById('backToTop');
+const BACK_TO_TOP_THRESHOLD=400;
+function toggleBackToTop(){
+  if(window.scrollY>BACK_TO_TOP_THRESHOLD)backToTop.classList.add('visible');
+  else backToTop.classList.remove('visible');
+}
+window.addEventListener('scroll',toggleBackToTop);
+backToTop.addEventListener('click',()=>{window.scrollTo({top:0,behavior:'smooth'});backToTop.classList.remove('visible')});
+</script>
+</body>
+</html>
